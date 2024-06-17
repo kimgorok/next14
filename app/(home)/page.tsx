@@ -1,29 +1,23 @@
-import Link from "next/link";
 import React from "react";
-import Movie from "../components/Movie";
 
 export const metadata = {
   title: "Home",
 };
-export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
+export const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
 
-async function getMovies() {
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
+async function getPokemons() {
   const response = await fetch(API_URL);
   const json = await response.json();
-  return json;
+  return json.results;
 }
+
 export default async function HomePage() {
-  const movies = await getMovies();
+  const pokemons = await getPokemons();
+  console.log(pokemons);
   return (
-    <div className="grid grid-cols-5 gap-6 max-w-[90%] w-full mx-auto">
-      {movies.map((movie) => (
-        <Movie
-          key={movie.id}
-          id={movie.id}
-          poster_path={movie.poster_path}
-          title={movie.title}
-        />
+    <div className="w-full flex-col items-center justify-center h-full">
+      {pokemons.map((pokemons, index) => (
+        <div key={index}>{pokemons.name}</div>
       ))}
     </div>
   );

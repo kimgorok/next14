@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
 
@@ -20,6 +21,7 @@ async function getPokemonDetails(url) {
 
 export default function HomePage() {
   const [pokemons, setPokemons] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -46,6 +48,13 @@ export default function HomePage() {
           <p>{pokemon.name}</p>
         </div>
       ))}
+      <button
+        onClick={() => {
+          router.push("/cards");
+        }}
+      >
+        시작
+      </button>
     </div>
   );
 }

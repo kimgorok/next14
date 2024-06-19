@@ -1,17 +1,10 @@
-"use client";
-
 import React from "react";
-import { useRouter } from "next/navigation";
+import MainBtn from "../components/MainBtn";
 
 export default function HomePage() {
-  const router = useRouter();
   return (
-    <button
-      onClick={() => {
-        router.push("/cards");
-      }}
-    >
-      시작
-    </button>
+    <div className="flex justify-center items-center w-full h-screen">
+      <MainBtn />
+    </div>
   );
 }

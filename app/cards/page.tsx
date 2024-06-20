@@ -22,12 +22,23 @@ async function getPokemonDetails(url) {
 export default function CardPage() {
   const router = useRouter();
   const [pokemons, setPokemons] = useState([]);
+  const [flippedCards, setFlippedCards] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const basicPokemons = await getPokemons();
+
+      // 포켓몬 목록 섞기
+      basicPokemons.sort(() => Math.random() - 0.5);
+
+      // 섞인 목록에서 6마리만 선택
+      const selectedPokemons = basicPokemons.slice(0, 6);
+
+      // 선택된 포켓몬 목록을 2배로 늘리기 (각 포켓몬을 2번씩 추가)
+      const duplicatedPokemons = [...selectedPokemons, ...selectedPokemons];
+
       const detailedPokemons = await Promise.all(
-        basicPokemons.map(async (pokemon) => {
+        duplicatedPokemons.map(async (pokemon) => {
           const details = await getPokemonDetails(pokemon.url);
           return {
             name: details.name,
@@ -39,6 +50,26 @@ export default function CardPage() {
     }
     fetchData();
   }, []);
+
+  const handleCardClick = (index) => {
+    if (flippedCards.length < 2 && !flippedCards.includes(index)) {
+      setFlippedCards((prev) => [...prev, index]);
+    }
+  };
+
+  useEffect(() => {
+    if (flippedCards.length === 2) {
+      const [firstIndex, secondIndex] = flippedCards;
+      if (pokemons[firstIndex].name !== pokemons[secondIndex].name) {
+        setTimeout(() => {
+          setFlippedCards([]);
+        }, 1000);
+      } else {
+        setFlippedCards([]);
+      }
+    }
+  }, [flippedCards, pokemons]);
+
   return (
     <div className="w-full flex-col items-center justify-center h-full">
       <button
@@ -48,11 +79,23 @@ export default function CardPage() {
       >
         뒤로가기
       </button>
-      <div className="w-full flex-col items-center justify-center h-full">
+      <div className="grid grid-cols-3 gap-4">
         {pokemons.map((pokemon, index) => (
-          <div key={index}>
-            <img src={pokemon.image} alt={pokemon.name} />
-            <p>{pokemon.name}</p>
+          <div
+            key={index}
+            className="relative"
+            onClick={() => handleCardClick(index)}
+          >
+            <div
+              className={`w-32 h-32 transform ${
+                flippedCards.includes(index) ? "rotate-y-0" : "rotate-y-180"
+              } transition-transform duration-500`}
+            >
+              <img
+                src={flippedCards.includes(index) ? pokemon.image : "/back.png"}
+                className="w-full h-full"
+              />
+            </div>
           </div>
         ))}
       </div>

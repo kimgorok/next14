@@ -22,6 +22,7 @@ const PokemonCards = () => {
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [appearPokemons, setAppearPokemons] = useState([]);
 
   const router = useRouter();
 
@@ -51,6 +52,7 @@ const PokemonCards = () => {
         })
       );
       setPokemons(detailedPokemons);
+      setAppearPokemons(selectedPokemons.map((p) => p.name));
       setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 업데이트
     }
     fetchData();
@@ -80,6 +82,13 @@ const PokemonCards = () => {
     }
   }, [flippedCards, pokemons]);
 
+  const handleNextClick = () => {
+    const queryParams = appearPokemons
+      .map((name, index) => `pokemon${index + 1}=${name}`)
+      .join("&");
+    router.push(`/detail?${queryParams}`);
+  };
+
   if (isLoading) {
     return <h2>게임 로딩중...</h2>;
   }
@@ -107,14 +116,13 @@ const PokemonCards = () => {
               }
               className="w-full h-full"
             />
+            {pokemon.name}
           </div>
         </div>
       ))}
       {matchedCards.length === pokemons.length && (
         <button
-          onClick={() => {
-            router.push("/detail");
-          }}
+          onClick={handleNextClick}
           className="mt-4 p-2 bg-blue-500 text-white rounded"
         >
           다음

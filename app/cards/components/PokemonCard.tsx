@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
 
@@ -21,6 +22,8 @@ const PokemonCards = () => {
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -110,8 +113,7 @@ const PokemonCards = () => {
       {matchedCards.length === pokemons.length && (
         <button
           onClick={() => {
-            // 다음 버튼 클릭 시 동작 추가
-            console.log("다음 단계로 이동");
+            router.push("/detail");
           }}
           className="mt-4 p-2 bg-blue-500 text-white rounded"
         >

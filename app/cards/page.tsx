@@ -23,6 +23,7 @@ export default function CardPage() {
   const router = useRouter();
   const [pokemons, setPokemons] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
+  const [matchedCards, setMatchedCards] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -52,7 +53,11 @@ export default function CardPage() {
   }, []);
 
   const handleCardClick = (index) => {
-    if (flippedCards.length < 2 && !flippedCards.includes(index)) {
+    if (
+      flippedCards.length < 2 &&
+      !flippedCards.includes(index) &&
+      !matchedCards.includes(index)
+    ) {
       setFlippedCards((prev) => [...prev, index]);
     }
   };
@@ -60,12 +65,13 @@ export default function CardPage() {
   useEffect(() => {
     if (flippedCards.length === 2) {
       const [firstIndex, secondIndex] = flippedCards;
-      if (pokemons[firstIndex].name !== pokemons[secondIndex].name) {
+      if (pokemons[firstIndex].name === pokemons[secondIndex].name) {
+        setMatchedCards((prev) => [...prev, firstIndex, secondIndex]);
+        setFlippedCards([]);
+      } else {
         setTimeout(() => {
           setFlippedCards([]);
         }, 1000);
-      } else {
-        setFlippedCards([]);
       }
     }
   }, [flippedCards, pokemons]);
@@ -88,11 +94,17 @@ export default function CardPage() {
           >
             <div
               className={`w-32 h-32 transform ${
-                flippedCards.includes(index) ? "rotate-y-0" : "rotate-y-180"
+                flippedCards.includes(index) || matchedCards.includes(index)
+                  ? "rotate-y-0"
+                  : "rotate-y-180"
               } transition-transform duration-500`}
             >
               <img
-                src={flippedCards.includes(index) ? pokemon.image : "/back.png"}
+                src={
+                  flippedCards.includes(index) || matchedCards.includes(index)
+                    ? pokemon.image
+                    : "/back.png"
+                }
                 className="w-full h-full"
               />
             </div>

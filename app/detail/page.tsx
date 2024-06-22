@@ -16,15 +16,15 @@ export default function DetailPage() {
       const weight = searchParams.get(`pokemon${i}Weight`);
       const height = searchParams.get(`pokemon${i}Height`);
       const types = searchParams.get(`pokemon${i}Types`);
-      const abilities = searchParams.get(`pokemon${i}Abilities`);
-      if (name && image && weight && height && types && abilities) {
+      const description = searchParams.get(`pokemon${i}Description`);
+      if (name && image && weight && height && types && description) {
         pokemonDetails.push({
           name,
           image,
           weight: (parseFloat(weight) / 10).toFixed(1),
           height: (parseFloat(height) / 10).toFixed(1),
           types,
-          abilities,
+          description,
         });
       }
     }
@@ -45,10 +45,10 @@ export default function DetailPage() {
           <div key={index} className="p-4 ">
             <img src={pokemon.image} className="w-16 h-16" />
             <h3>{pokemon.name}</h3>
+            <p>{pokemon.description}</p>
             <p>키: {pokemon.height} m</p>
             <p>몸무게: {pokemon.weight} kg</p>
             <p>타입: {pokemon.types}</p>
-            <p>능력: {pokemon.abilities}</p>
           </div>
         ))}
       </div>

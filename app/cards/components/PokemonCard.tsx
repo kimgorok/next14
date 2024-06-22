@@ -37,24 +37,12 @@ async function getPokemonDetails(url) {
     })
   );
 
-  const koreanAbilities = await Promise.all(
-    json.abilities.map(async (abilityInfo) => {
-      const abilityResponse = await fetch(abilityInfo.ability.url);
-      const abilityJson = await abilityResponse.json();
-      const koreanAbility = abilityJson.names.find(
-        (name) => name.language.name === "ko"
-      );
-      return koreanAbility ? koreanAbility.name : abilityInfo.ability.name;
-    })
-  );
-
   return {
     name: koreanName ? koreanName.name : json.name,
     image: json.sprites.front_default,
     weight: json.weight,
     height: json.height,
     types: koreanTypes.join(", "),
-    abilities: koreanAbilities.join(", "),
     description: koreanDescription
       ? koreanDescription.flavor_text
       : "정보 없음",
@@ -91,9 +79,17 @@ const PokemonCards = () => {
           return details;
         })
       );
+
+      // 중복 제거를 위해 Set 사용
+      const uniquePokemons = Array.from(
+        new Set(detailedPokemons.map((pokemon) => pokemon.name))
+      ).map((name) =>
+        detailedPokemons.find((pokemon) => pokemon.name === name)
+      );
+
       setPokemons(detailedPokemons);
-      setSelectedPokemons(detailedPokemons.slice(0, 6)); // 6개의 포켓몬 저장
-      setIsLoading(false);
+      setSelectedPokemons(uniquePokemons.slice(0, 6)); // 중복 없는 6개의 포켓몬 저장
+      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 업데이트
     }
     fetchData();
   }, []);

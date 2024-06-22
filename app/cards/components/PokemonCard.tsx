@@ -3,18 +3,62 @@ import { useRouter } from "next/navigation";
 
 export const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
 
-// 순수 함수로 데이터 가져오기 함수 정의
+// 포켓몬 정보 가져오기
 async function getPokemons() {
   const response = await fetch(API_URL);
   const json = await response.json();
   return json.results;
 }
 
-// 각 포켓몬의 세부 정보 가져오기 함수 정의
+// 포켓몬 세부 정보 가져오기
 async function getPokemonDetails(url) {
   const response = await fetch(url);
   const json = await response.json();
-  return json;
+  const speciesResponse = await fetch(json.species.url);
+  const speciesJson = await speciesResponse.json();
+
+  // 한국어 이름과 설명 가져오기
+  const koreanName = speciesJson.names.find(
+    (name) => name.language.name === "ko"
+  );
+  const koreanDescription = speciesJson.flavor_text_entries.find(
+    (entry) => entry.language.name === "ko"
+  );
+
+  // 한국어 타입과 특성 가져오기
+  const koreanTypes = await Promise.all(
+    json.types.map(async (typeInfo) => {
+      const typeResponse = await fetch(typeInfo.type.url);
+      const typeJson = await typeResponse.json();
+      const koreanType = typeJson.names.find(
+        (name) => name.language.name === "ko"
+      );
+      return koreanType ? koreanType.name : typeInfo.type.name;
+    })
+  );
+
+  const koreanAbilities = await Promise.all(
+    json.abilities.map(async (abilityInfo) => {
+      const abilityResponse = await fetch(abilityInfo.ability.url);
+      const abilityJson = await abilityResponse.json();
+      const koreanAbility = abilityJson.names.find(
+        (name) => name.language.name === "ko"
+      );
+      return koreanAbility ? koreanAbility.name : abilityInfo.ability.name;
+    })
+  );
+
+  return {
+    name: koreanName ? koreanName.name : json.name,
+    image: json.sprites.front_default,
+    weight: json.weight,
+    height: json.height,
+    types: koreanTypes.join(", "),
+    abilities: koreanAbilities.join(", "),
+    description: koreanDescription
+      ? koreanDescription.flavor_text
+      : "정보 없음",
+  };
 }
 
 const PokemonCards = () => {
@@ -44,27 +88,12 @@ const PokemonCards = () => {
       const detailedPokemons = await Promise.all(
         duplicatedPokemons.map(async (pokemon) => {
           const details = await getPokemonDetails(pokemon.url);
-          return {
-            name: details.name,
-            image: details.sprites.front_default,
-            weight: details.weight,
-            height: details.height,
-            types: details.types
-              .map((typeInfo) => typeInfo.type.name)
-              .join(", "),
-            abilities: details.abilities
-              .map((abilityInfo) => abilityInfo.ability.name)
-              .join(", "),
-          };
+          return details;
         })
       );
       setPokemons(detailedPokemons);
-      setSelectedPokemons(
-        selectedPokemons.map((pokemon) =>
-          detailedPokemons.find((d) => d.name === pokemon.name)
-        )
-      );
-      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 업데이트
+      setSelectedPokemons(detailedPokemons.slice(0, 6)); // 6개의 포켓몬 저장
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -107,7 +136,9 @@ const PokemonCards = () => {
             index + 1
           }Height=${pokemon.height}&pokemon${index + 1}Types=${
             pokemon.types
-          }&pokemon${index + 1}Abilities=${pokemon.abilities}`
+          }&pokemon${index + 1}Abilities=${pokemon.abilities}&pokemon${
+            index + 1
+          }Description=${pokemon.description}`
       )
       .join("&");
     router.push(`/detail?${queryParams}`);

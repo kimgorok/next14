@@ -40,11 +40,14 @@ export default function DetailPage() {
       >
         처음으로
       </button>
-      <div className="flex flex-col items-center">
+      <div className="grid grid-cols-3 gap-4">
         {pokemons.map((pokemon, index) => (
-          <div key={index} className="p-4 ">
-            <img src={pokemon.image} className="w-16 h-16" />
-            <h3>{pokemon.name}</h3>
+          <div
+            key={index}
+            className="flex flex-col items-center p-4 max-w-80 h-auto border-2 border-slate-300 rounded-2xl"
+          >
+            <img src={pokemon.image} className="w-48 h-48" />
+            <p className="font-bold text-3xl">{pokemon.name}</p>
             <p>{pokemon.description}</p>
             <p>키: {pokemon.height} m</p>
             <p>몸무게: {pokemon.weight} kg</p>

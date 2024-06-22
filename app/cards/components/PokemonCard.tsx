@@ -33,7 +33,10 @@ const PokemonCards = () => {
       const selectedPokemons = basicPokemons.slice(0, 6);
 
       // 선택된 포켓몬 목록을 2배로 늘리기 (각 포켓몬을 2번씩 추가)
-      const duplicatedPokemons = [...selectedPokemons, ...selectedPokemons];
+      let duplicatedPokemons = [...selectedPokemons, ...selectedPokemons];
+
+      // 배열을 무작위로 섞기
+      duplicatedPokemons.sort(() => Math.random() - 0.5);
 
       const detailedPokemons = await Promise.all(
         duplicatedPokemons.map(async (pokemon) => {

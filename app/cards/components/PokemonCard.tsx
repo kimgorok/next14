@@ -22,8 +22,7 @@ const PokemonCards = () => {
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [appearPokemons, setAppearPokemons] = useState([]);
-
+  const [selectedPokemons, setSelectedPokemons] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -48,11 +47,23 @@ const PokemonCards = () => {
           return {
             name: details.name,
             image: details.sprites.front_default,
+            weight: details.weight,
+            height: details.height,
+            types: details.types
+              .map((typeInfo) => typeInfo.type.name)
+              .join(", "),
+            abilities: details.abilities
+              .map((abilityInfo) => abilityInfo.ability.name)
+              .join(", "),
           };
         })
       );
       setPokemons(detailedPokemons);
-      setAppearPokemons(selectedPokemons.map((p) => p.name));
+      setSelectedPokemons(
+        selectedPokemons.map((pokemon) =>
+          detailedPokemons.find((d) => d.name === pokemon.name)
+        )
+      );
       setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 업데이트
     }
     fetchData();
@@ -82,16 +93,25 @@ const PokemonCards = () => {
     }
   }, [flippedCards, pokemons]);
 
-  const handleNextClick = () => {
-    const queryParams = appearPokemons
-      .map((name, index) => `pokemon${index + 1}=${name}`)
-      .join("&");
-    router.push(`/detail?${queryParams}`);
-  };
-
   if (isLoading) {
     return <h2>게임 로딩중...</h2>;
   }
+
+  const handleNextClick = () => {
+    const queryParams = selectedPokemons
+      .map(
+        (pokemon, index) =>
+          `pokemon${index + 1}Name=${pokemon.name}&pokemon${index + 1}Image=${
+            pokemon.image
+          }&pokemon${index + 1}Weight=${pokemon.weight}&pokemon${
+            index + 1
+          }Height=${pokemon.height}&pokemon${index + 1}Types=${
+            pokemon.types
+          }&pokemon${index + 1}Abilities=${pokemon.abilities}`
+      )
+      .join("&");
+    router.push(`/detail?${queryParams}`);
+  };
 
   return (
     <div className="grid grid-cols-3 gap-4">

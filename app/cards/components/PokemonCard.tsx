@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
 
@@ -148,22 +149,29 @@ const PokemonCards = () => {
           className="relative w-min"
           onClick={() => handleCardClick(index)}
         >
-          <div
-            className={`w-32 h-40 flex justify-center items-center rounded-2xl border-8 border-neutral-700 bg-blue-100 transform ${
-              flippedCards.includes(index) || matchedCards.includes(index)
-                ? "rotate-y-0"
-                : "rotate-y-180"
-            } transition-transform duration-500`}
+          <motion.div
+            className={`w-32 h-40 flex justify-center items-center rounded-2xl border-8 border-neutral-700 bg-blue-100`}
+            style={{ transformStyle: "preserve-3d" }}
+            animate={{
+              rotateY:
+                flippedCards.includes(index) || matchedCards.includes(index)
+                  ? 0
+                  : 180,
+            }}
+            transition={{ duration: 0.5 }}
           >
-            <img
+            <motion.img
               src={
                 flippedCards.includes(index) || matchedCards.includes(index)
                   ? pokemon.image
                   : "/back.png"
               }
               className="w-28 h-auto"
+              style={{
+                backfaceVisibility: "initial",
+              }}
             />
-          </div>
+          </motion.div>
           {pokemon.name}
         </div>
       ))}

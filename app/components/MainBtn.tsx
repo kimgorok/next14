@@ -9,9 +9,9 @@ export default function MainBtn() {
       onClick={() => {
         router.push("/cards");
       }}
-      className="cursor-pointer p-4"
+      className="cursor-pointer p-4 bg-emerald-500 border-8 rounded-2xl"
     >
-      시작
+      시작하기
     </div>
   );
 }

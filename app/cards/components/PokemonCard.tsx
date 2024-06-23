@@ -141,15 +141,15 @@ const PokemonCards = () => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-4 w-full">
       {pokemons.map((pokemon, index) => (
         <div
           key={index}
-          className="relative"
+          className="relative w-min"
           onClick={() => handleCardClick(index)}
         >
           <div
-            className={`w-32 h-32 transform ${
+            className={`w-32 h-40 flex justify-center items-center rounded-2xl border-8 border-neutral-700 bg-blue-100 transform ${
               flippedCards.includes(index) || matchedCards.includes(index)
                 ? "rotate-y-0"
                 : "rotate-y-180"
@@ -161,10 +161,10 @@ const PokemonCards = () => {
                   ? pokemon.image
                   : "/back.png"
               }
-              className="w-full h-full"
+              className="w-28 h-auto"
             />
-            {pokemon.name}
           </div>
+          {pokemon.name}
         </div>
       ))}
       {matchedCards.length === pokemons.length && (

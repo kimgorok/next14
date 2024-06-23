@@ -1,17 +1,27 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { btnHoverAnimation } from "./btnMotion";
 
-export default function MainBtn() {
+interface MainBtnProps {
+  text: string;
+  url: string;
+}
+
+const MainBtn = ({ text, url }: MainBtnProps) => {
   const router = useRouter();
   return (
-    <div
+    <motion.button
       onClick={() => {
-        router.push("/cards");
+        router.push(url);
       }}
-      className="cursor-pointer p-4 bg-emerald-500 border-8 rounded-2xl"
+      className="font-extrabold text-xl cursor-pointer p-4 bg-emerald-500 border-8 border-zinc-600 rounded-2xl"
+      {...btnHoverAnimation}
     >
-      시작하기
-    </div>
+      {text}
+    </motion.button>
   );
-}
+};
+
+export default MainBtn;

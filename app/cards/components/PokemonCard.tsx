@@ -179,13 +179,13 @@ const PokemonCards = () => {
           </div>
         ))}
         {matchedCards.length === pokemons.length && (
-          <button
+          <motion.button
             onClick={handleNextClick}
-            className="fixed right-1/4 top-1/2 transform -translate-x-1/2 -translate-y-1/2 font-extrabold text-xl cursor-pointer p-4 bg-emerald-500 border-8 border-zinc-600 rounded-2xl"
+            className="fixed right-[20%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 font-extrabold text-xl cursor-pointer p-4 bg-emerald-500 border-8 border-zinc-600 rounded-2xl"
             {...btnHoverAnimation}
           >
             다음
-          </button>
+          </motion.button>
         )}
       </div>
     </div>

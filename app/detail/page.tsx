@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { btnHoverAnimation } from "../components/btnMotion";
+import MainBtn from "../components/MainBtn";
 
 export default function DetailPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [pokemons, setPokemons] = useState([]);
 
@@ -35,16 +33,8 @@ export default function DetailPage() {
 
   return (
     <div>
-      <motion.button
-        className=""
-        {...btnHoverAnimation}
-        onClick={() => {
-          router.push("/");
-        }}
-      >
-        처음으로
-      </motion.button>
-      <div className="grid grid-cols-3 gap-4">
+      <MainBtn text="처음으로" url="/" />
+      <div className="grid grid-cols-3 gap-4 pt-4">
         {pokemons.map((pokemon, index) => (
           <div
             key={index}

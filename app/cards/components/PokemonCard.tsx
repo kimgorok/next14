@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { btnHoverAnimation } from "../../components/btnMotion";
 
 export const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
@@ -41,7 +41,9 @@ async function getPokemonDetails(url) {
 
   return {
     name: koreanName ? koreanName.name : json.name,
-    image: json.sprites.front_default,
+    image:
+      json.sprites.versions["generation-v"]["black-white"].animated
+        .front_default, // 움짤 URL
     weight: json.weight,
     height: json.height,
     types: koreanTypes.join(", "),

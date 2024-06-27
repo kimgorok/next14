@@ -177,7 +177,6 @@ const PokemonCards = () => {
                 }}
               />
             </motion.div>
-            {pokemon.name}
           </div>
         ))}
         {matchedCards.length === pokemons.length && (

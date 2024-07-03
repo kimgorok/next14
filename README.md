@@ -46,7 +46,7 @@ $ npm run dev
 ---
 |카드 게임 화면|출현한 포켓몬 도감 화면|
 |---|---|
-|![포케카드](https://github.com/GachonCodingClub/miti-frontend-vite/assets/128457944/ce4a6992-cd71-431e-a011-e0a2a0c819c8)|![포케카드2](https://github.com/GachonCodingClub/miti-frontend-vite/assets/128457944/6b8e627b-492e-425e-8421-be27a601b0a8)|
+|![메인화면](https://github.com/kimgorok/next14/assets/128457944/bbefb94f-6b1e-4732-bace-d149ce82fade)|![도감화면](https://github.com/kimgorok/next14/assets/128457944/266e779e-cc8b-4dfd-aeff-31ce4c0ba9be)|
 
 같은 그림이 그려진 한 쌍의 카드를 찾으며, 모든 쌍을 찾으면 클리어하는 포켓몬 같은 그림 찾기 게임입니다.
 - 카드 게임의 일러스트는 Poke API에서 제공한 움직이는 gif 이미지가 적용되어 있습니다.

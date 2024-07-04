@@ -1,6 +1,9 @@
 import React from "react";
 import "../../styles/globals.css";
-import { metadata } from "./metadata";
+
+const metadata = {
+  title: "현중몬스터",
+};
 
 export default function RootLayout({
   children,

@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import MainBtn from "../components/MainBtn";
 
 export default function DetailPage() {
   const searchParams = useSearchParams();
@@ -33,7 +32,6 @@ export default function DetailPage() {
 
   return (
     <>
-      <MainBtn text="처음으로" url="/" />
       <div className="flex flex-col items-center">
         <div className="absolute top-3 w-full flex justify-center font-extrabold text-3xl text-gray-700">
           출현한 포켓몬!

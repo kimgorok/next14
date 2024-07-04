@@ -1,5 +1,6 @@
 import React from "react";
 import "../../styles/globals.css";
+import MainBtn from "../components/MainBtn";
 
 const metadata = {
   title: "카드",
@@ -15,7 +16,10 @@ export default function RootLayout({
       <head>
         <title>{metadata.title}</title>
       </head>
-      <body>{children}</body>
+      <body>
+        <MainBtn text="뒤로가기" url="/" />
+        {children}
+      </body>
     </html>
   );
 }
